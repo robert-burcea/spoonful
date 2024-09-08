@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "name": "coca-cola",
+      "barcode": 12343,
+      "qty": 321,
+      "lastDateOfInventoryCheck": "2024-09-06T00:00:00.000Z",
+      "unitsPerDayConsumption": 132,
+      "minimumStockDaysForAlert": 7
+    },
+    {
+      "id": 2,
+      "name": "fanta",
+      "barcode": 13343,
+      "qty": 331,
+      "lastDateOfInventoryCheck": "2024-09-06T00:00:00.000Z",
+      "unitsPerDayConsumption": 3,
+      "minimumStockDaysForAlert": 7
+    }
+  ]

@@ -1,6 +1,7 @@
 import { createContext, useState, ReactNode } from 'react';
 import { Product } from '../types/Product';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
+import INVENTORY from '../utils/inventory.json';
 
 export interface InventoryContextType {
   inventory: Product[];
@@ -11,6 +12,22 @@ interface InventoryProviderProps {
   children: ReactNode;
 }
 
+const rawProducts: {
+  id: number;
+  name: string;
+  barcode: number;
+  qty: number;
+  lastDateOfInventoryCheck: string;
+  unitsPerDayConsumption: number;
+  minimumStockDaysForAlert: number;
+}[] = INVENTORY;
+
+const products: Product[] = rawProducts.map((item) => ({
+  ...item,
+  lastDateOfInventoryCheck: new Date(item.lastDateOfInventoryCheck), // Convert string to Date
+  minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
+}));
+
 // Create a context with a default value (optional)
 const InventoryContext = createContext<InventoryContextType | undefined>(
   undefined
@@ -19,26 +36,7 @@ const InventoryContext = createContext<InventoryContextType | undefined>(
 export const InventoryProvider: React.FC<InventoryProviderProps> = ({
   children,
 }) => {
-  const [inventory, setInventory] = useState<Product[]>([
-    {
-      id: 1,
-      name: 'coca-cola',
-      barcode: 12343,
-      qty: 321,
-      lastDateOfInventoryCheck: new Date(),
-      unitsPerDayConsumption: 132,
-      minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
-    },
-    {
-      id: 2,
-      name: 'fanta',
-      barcode: 13343,
-      qty: 331,
-      lastDateOfInventoryCheck: new Date(),
-      unitsPerDayConsumption: 3,
-      minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
-    },
-  ]);
+  const [inventory, setInventory] = useState<Product[]>(products);
 
   const updateInventory = (id: number, newQuantity: number) => {
     setInventory((prevInventory) =>

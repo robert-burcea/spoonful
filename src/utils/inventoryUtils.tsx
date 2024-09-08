@@ -1,19 +1,22 @@
 import { Product } from '../types/Product';
 
-export const calculateDaysUntilAlert = (product: Product) => {
+export const getEstimatedStock = (product: Product) => {
   const currentDate = new Date();
   const lastCheckDate = new Date(product.lastDateOfInventoryCheck);
   const daysPassed = Math.floor(
     (currentDate.getTime() - lastCheckDate.getTime()) / (1000 * 60 * 60 * 24)
   );
-  const estimatedStock =
-    product.qty - daysPassed * product.unitsPerDayConsumption;
+  return product.qty - daysPassed * product.unitsPerDayConsumption;
+};
 
-  if (estimatedStock <= product.minimumStockForAlert) {
+export const calculateDaysUntilAlert = (product: Product) => {
+  const estimatedStock = getEstimatedStock(product);
+
+  if (estimatedStock <= product.minimumStockDaysForAlert) {
     return 0; // Alert now
   } else {
     return Math.ceil(
-      (estimatedStock - product.minimumStockForAlert) /
+      (estimatedStock - product.minimumStockDaysForAlert) /
         product.unitsPerDayConsumption
     );
   }

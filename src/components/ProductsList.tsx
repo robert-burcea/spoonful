@@ -1,9 +1,22 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import ProductsContext from '../contexts/InventoryContext';
+import { Product } from '../types/Product';
+import { getEstimatedStock } from '../utils/inventoryUtils';
 
 function ProductsList() {
   const productsContext = useContext(ProductsContext);
+
+  const updateStock = (product: Product) => {
+    const estimatedStock = getEstimatedStock(product);
+  };
+
+  useEffect(() => {
+    productsContext?.inventory.map((item) => {
+      let newStock = getEstimatedStock(item);
+      productsContext.updateInventory(item.id, newStock);
+    });
+  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
