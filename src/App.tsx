@@ -1,11 +1,6 @@
-import { useState } from 'react';
 import './App.css';
-import InventoryContext, {
-  InventoryContextType,
-  InventoryProvider,
-} from './contexts/InventoryContext';
+import { InventoryProvider } from './contexts/InventoryContext';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Product } from './types/Product';
 import ProductsList from './components/ProductsList';
 import Admin from './components/Admin';
 import Navbar from './components/Navbar';

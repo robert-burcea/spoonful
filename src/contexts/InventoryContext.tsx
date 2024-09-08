@@ -1,5 +1,6 @@
 import { createContext, useState, ReactNode } from 'react';
 import { Product } from '../types/Product';
+import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 
 export interface InventoryContextType {
   inventory: Product[];
@@ -19,8 +20,24 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({
   children,
 }) => {
   const [inventory, setInventory] = useState<Product[]>([
-    { id: 1, name: 'coca-cola', barcode: 12343, qty: 321 },
-    { id: 2, name: 'fanta', barcode: 13343, qty: 331 },
+    {
+      id: 1,
+      name: 'coca-cola',
+      barcode: 12343,
+      qty: 321,
+      lastDateOfInventoryCheck: new Date(),
+      unitsPerDayConsumption: 132,
+      minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
+    },
+    {
+      id: 2,
+      name: 'fanta',
+      barcode: 13343,
+      qty: 331,
+      lastDateOfInventoryCheck: new Date(),
+      unitsPerDayConsumption: 3,
+      minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
+    },
   ]);
 
   const updateInventory = (id: number, newQuantity: number) => {
