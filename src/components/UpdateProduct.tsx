@@ -3,7 +3,13 @@ import InventoryContext from '../contexts/InventoryContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 import { Product } from '../types/Product';
-import { updateProduct } from '../firebase/firebase-functions';
+import {
+  formatFirestoreTimestamp,
+  updateProduct,
+} from '../firebase/firebase-functions';
+import { Timestamp } from 'firebase/firestore';
+
+export type UpdateProductInterface = Omit<Product, 'lastDateOfInventoryCheck'>;
 
 const UpdateProduct: React.FC = () => {
   const location = useLocation();
@@ -11,13 +17,12 @@ const UpdateProduct: React.FC = () => {
 
   const { product } = location.state as { product: Product };
 
-  const [formData, setFormData] = useState<Product>({
+  const [formData, setFormData] = useState<UpdateProductInterface>({
     barcode: product.barcode,
     alert: product.alert,
     name: product.name,
     id: product.id,
     qty: product.qty,
-    lastDateOfInventoryCheck: product.lastDateOfInventoryCheck,
     unitsPerDayConsumption: product.unitsPerDayConsumption,
     minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
   });
@@ -33,7 +38,7 @@ const UpdateProduct: React.FC = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    //updateInventory(formData.id, formData.qty);
+    console.log(product);
     updateProduct(formData);
     navigate('/products');
   };
@@ -43,9 +48,9 @@ const UpdateProduct: React.FC = () => {
       <h2 className="text-xl font-bold">{product.name}</h2>
       <form onSubmit={handleSubmit} className="p-7 flex flex-col items-center">
         <input
+          value={formData.name}
           className="border p-3"
           type="text"
-          placeholder="Product name"
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         ></input>
         <input
@@ -59,7 +64,7 @@ const UpdateProduct: React.FC = () => {
         <input
           className="border p-3"
           type="text"
-          placeholder="Consumption (units/day)"
+          value={formData.unitsPerDayConsumption}
           onChange={(e) =>
             setFormData({
               ...formData,

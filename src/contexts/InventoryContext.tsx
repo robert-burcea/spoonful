@@ -37,6 +37,8 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({
               id: product.id,
               ...product,
             }));
+            console.log(products);
+            refreshStockInfo(products);
             setInventory(products);
           } else {
             console.log('No products field found in the document.');

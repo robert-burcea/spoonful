@@ -1,6 +1,7 @@
 import { updateDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { Product } from '../types/Product';
+import { UpdateProductInterface } from '../components/UpdateProduct';
 
 // Function to add a new product
 export const addProductToFirebase = async (product: Product) => {
@@ -34,20 +35,24 @@ export const addProductToFirebase = async (product: Product) => {
 
 // Function to update product quantity
 
-export const updateProduct = async (product: Product) => {
+export const updateProduct = async (product: UpdateProductInterface) => {
   const docRef = doc(db, 'inventory', 'beverages');
 
   try {
     // Get the current data from Firestore
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      const beveragesData = docSnap.data() as { products: Product[] };
+      const beveragesData = docSnap.data();
 
       // Update the specific product in the array
       const updatedProducts = beveragesData.products.map(
         (dbProduct: Product) =>
           dbProduct.id === product.id
-            ? { ...dbProduct, ...product } // Merge updated data with the existing product
+            ? {
+                ...dbProduct,
+                ...product,
+                lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
+              } // Merge updated data with the existing product
             : dbProduct // Ensure other products remain unchanged
       );
 
