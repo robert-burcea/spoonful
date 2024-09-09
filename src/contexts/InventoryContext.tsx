@@ -1,8 +1,6 @@
 import { createContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../types/Product';
-import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
-import { fetchProducts } from '../firebase/firebase-functions';
-import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
 export interface InventoryContextType {

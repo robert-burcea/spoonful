@@ -21,6 +21,15 @@ function ProductCard({ product }: ProductCardProps) {
       deleteProduct(product.id);
   };
 
+  const formatDate = (date: Date | null) => {
+    if (date === null) return;
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
   return (
     <div className="p-4 border rounded-lg shadow-md m-4">
       <h2 className="text-xl font-bold">{product.name}</h2>
@@ -28,7 +37,7 @@ function ProductCard({ product }: ProductCardProps) {
       <p>Days until alert: {calculateDaysUntilAlert(product)}</p>
       <p>
         Last inventory check:{' '}
-        {formatFirestoreTimestamp(product.lastDateOfInventoryCheck)}
+        {formatDate(formatFirestoreTimestamp(product.lastDateOfInventoryCheck))}
       </p>
       <p>Minimum stock days for alert: {product.minimumStockDaysForAlert}</p>
       <button

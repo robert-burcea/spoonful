@@ -91,7 +91,7 @@ type FirestoreTimestamp = Timestamp | { seconds: number; nanoseconds: number };
 
 export const formatFirestoreTimestamp = (
   timestamp: FirestoreTimestamp | null
-): string | null => {
+): Date | null => {
   if (!timestamp) return null;
 
   let date: Date;
@@ -108,9 +108,5 @@ export const formatFirestoreTimestamp = (
   }
 
   // Format the date for display (e.g., 'September 5, 2024')
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  return date;
 };
