@@ -2,6 +2,7 @@ import { createContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../types/Product';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { refreshStockInfo } from '../utils/inventoryUtils';
 
 export interface InventoryContextType {
   inventory: Product[];
@@ -48,6 +49,9 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({
         console.error('Error fetching document:', error);
       }
     );
+
+    //we check to see if any product stock is running low
+    refreshStockInfo(inventory);
 
     // Clean up the listener on component unmount
     return () => unsubscribe();

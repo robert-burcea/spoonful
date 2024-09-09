@@ -13,6 +13,7 @@ const UpdateProduct: React.FC = () => {
 
   const [formData, setFormData] = useState<Product>({
     barcode: product.barcode,
+    alert: product.alert,
     name: product.name,
     id: product.id,
     qty: product.qty,

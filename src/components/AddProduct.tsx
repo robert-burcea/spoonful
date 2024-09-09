@@ -12,6 +12,7 @@ const AddProduct: React.FC = () => {
 
   const [formData, setFormData] = useState<Product>({
     barcode: 0,
+    alert: false,
     name: '',
     id: uuidv4(),
     qty: 0,

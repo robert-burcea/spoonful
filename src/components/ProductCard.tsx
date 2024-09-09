@@ -31,15 +31,27 @@ function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="p-4 border rounded-lg shadow-md m-4">
+    <div
+      className={`p-4 border rounded-lg shadow-md m-4 ${product.alert ? 'bg-red-300' : 'bg-green-200'}`}
+    >
       <h2 className="text-xl font-bold">{product.name}</h2>
-      <p>Estimated stock: {product.qty} </p>
-      <p>Days until alert: {calculateDaysUntilAlert(product)}</p>
       <p>
-        Last inventory check:{' '}
+        Stoc estimat: <p className="text-xl font-bold">{product.qty}</p>{' '}
+      </p>
+      <p>Zile pana la alerta: {calculateDaysUntilAlert(product)}</p>
+      <p>
+        Ultimul inventar:{' '}
         {formatDate(formatFirestoreTimestamp(product.lastDateOfInventoryCheck))}
       </p>
-      <p>Minimum stock days for alert: {product.minimumStockDaysForAlert}</p>
+      <p>
+        Alerta cu <b>{product.minimumStockDaysForAlert}</b> zile inainte
+      </p>
+      <p>
+        Consum pe zi: <b>{product.unitsPerDayConsumption}</b>
+      </p>
+      <p className="text-red-800 mt-2 font-bold">
+        {product.alert ? 'ATENTIE! Stoc pe final!' : ''}
+      </p>
       <button
         className="bg-blue-500 text-white py-1 px-2 m-2 rounded"
         onClick={() => handleEditClick(product)}
@@ -47,10 +59,16 @@ function ProductCard({ product }: ProductCardProps) {
         Edit
       </button>
       <button
-        className="bg-blue-500 text-white py-1 px-2 mt-2 rounded"
+        className="bg-blue-500 text-white py-1 px-2 m-2 rounded"
         onClick={() => handleDeleteClick()}
       >
         Delete
+      </button>
+      <button className="bg-blue-500 text-white py-1 px-2 m-2 rounded">
+        Adauga vanzare
+      </button>
+      <button className="bg-blue-500 text-white py-1 px-2 m-2 rounded">
+        Introdu stoc inventar
       </button>
     </div>
   );
