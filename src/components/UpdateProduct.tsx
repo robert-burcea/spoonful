@@ -3,11 +3,7 @@ import InventoryContext from '../contexts/InventoryContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 import { Product } from '../types/Product';
-import {
-  formatFirestoreTimestamp,
-  updateProduct,
-} from '../firebase/firebase-functions';
-import { Timestamp } from 'firebase/firestore';
+import { updateProduct } from '../firebase/firebase-functions';
 
 export type UpdateProductInterface = Omit<Product, 'lastDateOfInventoryCheck'>;
 
