@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Product } from '../types/Product';
 import InventoryContext from '../contexts/InventoryContext';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 
 const UpdateProduct: React.FC = () => {
   const location = useLocation();
@@ -14,6 +15,9 @@ const UpdateProduct: React.FC = () => {
     name: product.name,
     id: product.id,
     qty: product.qty,
+    lastDateOfInventoryCheck: product.lastDateOfInventoryCheck,
+    unitsPerDayConsumption: product.unitsPerDayConsumption,
+    minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
   });
 
   const productsList = useContext(InventoryContext);
