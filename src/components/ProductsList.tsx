@@ -1,15 +1,10 @@
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import ProductsContext from '../contexts/InventoryContext';
-import { Product } from '../types/Product';
 import { getEstimatedStock } from '../utils/inventoryUtils';
 
 function ProductsList() {
   const productsContext = useContext(ProductsContext);
-
-  const updateStock = (product: Product) => {
-    const estimatedStock = getEstimatedStock(product);
-  };
 
   useEffect(() => {
     productsContext?.inventory.map((item) => {

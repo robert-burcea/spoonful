@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Product } from '../types/Product';
 import InventoryContext from '../contexts/InventoryContext';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 
 const UpdateProduct: React.FC = () => {
@@ -27,9 +27,9 @@ const UpdateProduct: React.FC = () => {
     return <p>Error: Inventory context is not available.</p>;
   }
 
-  const { inventory, updateInventory } = productsList;
+  const { updateInventory } = productsList;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     updateInventory(formData.id, formData.qty);
     navigate('/products');

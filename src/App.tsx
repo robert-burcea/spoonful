@@ -5,7 +5,6 @@ import ProductsList from './components/ProductsList';
 import Admin from './components/Admin';
 import Navbar from './components/Navbar';
 import UpdateProduct from './components/UpdateProduct';
-import { getEstimatedStock } from './utils/inventoryUtils';
 
 function App() {
   return (

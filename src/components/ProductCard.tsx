@@ -1,10 +1,6 @@
-import { useState } from 'react';
 import { Product } from '../types/Product';
 import { useNavigate } from 'react-router-dom';
-import {
-  calculateDaysUntilAlert,
-  getEstimatedStock,
-} from '../utils/inventoryUtils';
+import { calculateDaysUntilAlert } from '../utils/inventoryUtils';
 
 interface ProductCardProps {
   product: Product;
