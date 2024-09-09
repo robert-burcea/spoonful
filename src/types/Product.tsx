@@ -1,9 +1,11 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   barcode: number;
   qty: number;
-  lastDateOfInventoryCheck: Date;
+  lastDateOfInventoryCheck: Timestamp;
   unitsPerDayConsumption: number;
   minimumStockDaysForAlert: number;
 }

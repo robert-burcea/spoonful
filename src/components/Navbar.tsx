@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
+import { PiListNumbersFill } from 'react-icons/pi';
 import { MdOutlineAddShoppingCart } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 import LOGO from '../assets/logo.png';
@@ -19,6 +20,9 @@ const Navbar = () => {
         <div>
           <ul className="hidden md:flex">
             <Link to="/products" className="hover:bg-blue-700 p-2 rounded">
+              <PiListNumbersFill size={60} color={'white'} />
+            </Link>
+            <Link to="/add-product" className="hover:bg-blue-700 p-2 rounded">
               <MdOutlineAddShoppingCart size={60} color={'white'} />
             </Link>
             <Link to="/admin" className="hover:bg-blue-700 p-2 rounded">
@@ -63,6 +67,12 @@ const Navbar = () => {
                   <li className="hover:bg-blue-700 p-2 rounded">
                     <Link onClick={toggleMenu} to="/products">
                       PRODUCTS
+                    </Link>
+                  </li>
+
+                  <li className="hover:bg-blue-700 p-2 rounded">
+                    <Link onClick={toggleMenu} to="/add-product">
+                      ADD PRODUCT
                     </Link>
                   </li>
 

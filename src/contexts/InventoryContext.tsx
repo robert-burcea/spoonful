@@ -1,32 +1,17 @@
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../types/Product';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
-import INVENTORY from '../utils/inventory.json';
+import { fetchProducts } from '../firebase/firebase-functions';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
 export interface InventoryContextType {
   inventory: Product[];
-  updateInventory: (id: number, newQuantity: number) => void;
 }
 
 interface InventoryProviderProps {
   children: ReactNode;
 }
-
-const rawProducts: {
-  id: number;
-  name: string;
-  barcode: number;
-  qty: number;
-  lastDateOfInventoryCheck: string;
-  unitsPerDayConsumption: number;
-  minimumStockDaysForAlert: number;
-}[] = INVENTORY;
-
-const products: Product[] = rawProducts.map((item) => ({
-  ...item,
-  lastDateOfInventoryCheck: new Date(item.lastDateOfInventoryCheck), // Convert string to Date
-  minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
-}));
 
 // Create a context with a default value (optional)
 const InventoryContext = createContext<InventoryContextType | undefined>(
@@ -36,17 +21,42 @@ const InventoryContext = createContext<InventoryContextType | undefined>(
 export const InventoryProvider: React.FC<InventoryProviderProps> = ({
   children,
 }) => {
-  const [inventory, setInventory] = useState<Product[]>(products);
+  const [inventory, setInventory] = useState<Product[]>([]);
 
-  const updateInventory = (id: number, newQuantity: number) => {
-    setInventory((prevInventory) =>
-      prevInventory.map((item) =>
-        item.id === id ? { ...item, qty: newQuantity } : item
-      )
+  useEffect(() => {
+    // Reference to the Firestore document
+    const docRef = doc(db, 'inventory', 'beverages');
+
+    // Set up a real-time listener
+    const unsubscribe = onSnapshot(
+      docRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data() as { products: Product[] };
+          if (data.products) {
+            const products: Product[] = data.products.map((product: any) => ({
+              id: product.id,
+              ...product,
+            }));
+            setInventory(products);
+          } else {
+            console.log('No products field found in the document.');
+          }
+        } else {
+          console.log('No such document!');
+        }
+      },
+      (error: Error) => {
+        console.error('Error fetching document:', error);
+      }
     );
-  };
+
+    // Clean up the listener on component unmount
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <InventoryContext.Provider value={{ inventory, updateInventory }}>
+    <InventoryContext.Provider value={{ inventory }}>
       {children}
     </InventoryContext.Provider>
   );

@@ -1,6 +1,10 @@
 import { Product } from '../types/Product';
 import { useNavigate } from 'react-router-dom';
 import { calculateDaysUntilAlert } from '../utils/inventoryUtils';
+import {
+  deleteProduct,
+  formatFirestoreTimestamp,
+} from '../firebase/firebase-functions';
 
 interface ProductCardProps {
   product: Product;
@@ -12,10 +16,9 @@ function ProductCard({ product }: ProductCardProps) {
   const handleEditClick = (product: Product) => {
     navigate('/update-product', { state: { product } });
   };
-
-  const formatDate = (dateString: Date) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(); // Formats the date as 'MM/DD/YYYY' or based on locale
+  const handleDeleteClick = () => {
+    if (confirm(`Are you sure you want to delete ${product.name}?`))
+      deleteProduct(product.id);
   };
 
   return (
@@ -24,14 +27,21 @@ function ProductCard({ product }: ProductCardProps) {
       <p>Estimated stock: {product.qty} </p>
       <p>Days until alert: {calculateDaysUntilAlert(product)}</p>
       <p>
-        Last inventory check: {formatDate(product.lastDateOfInventoryCheck)}
+        Last inventory check:{' '}
+        {formatFirestoreTimestamp(product.lastDateOfInventoryCheck)}
       </p>
       <p>Minimum stock days for alert: {product.minimumStockDaysForAlert}</p>
       <button
-        className="bg-blue-500 text-white py-1 px-2 mt-2 rounded"
+        className="bg-blue-500 text-white py-1 px-2 m-2 rounded"
         onClick={() => handleEditClick(product)}
       >
         Edit
+      </button>
+      <button
+        className="bg-blue-500 text-white py-1 px-2 mt-2 rounded"
+        onClick={() => handleDeleteClick()}
+      >
+        Delete
       </button>
     </div>
   );

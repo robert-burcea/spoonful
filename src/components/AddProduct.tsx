@@ -1,23 +1,22 @@
 import { useState, useContext } from 'react';
 import InventoryContext from '../contexts/InventoryContext';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 import { Product } from '../types/Product';
-import { updateProduct } from '../firebase/firebase-functions';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+import { addProductToFirebase } from '../firebase/firebase-functions';
+import { Timestamp } from 'firebase/firestore';
 
-const UpdateProduct: React.FC = () => {
-  const location = useLocation();
+const AddProduct: React.FC = () => {
   const navigate = useNavigate();
 
-  const { product } = location.state as { product: Product };
-
   const [formData, setFormData] = useState<Product>({
-    barcode: product.barcode,
-    name: product.name,
-    id: product.id,
-    qty: product.qty,
-    lastDateOfInventoryCheck: product.lastDateOfInventoryCheck,
-    unitsPerDayConsumption: product.unitsPerDayConsumption,
+    barcode: 0,
+    name: '',
+    id: uuidv4(),
+    qty: 0,
+    lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
+    unitsPerDayConsumption: 0,
     minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
   });
 
@@ -32,14 +31,12 @@ const UpdateProduct: React.FC = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    //updateInventory(formData.id, formData.qty);
-    updateProduct(formData);
+    addProductToFirebase(formData);
     navigate('/products');
   };
 
   return (
     <div className="flex flex-col p-4 border rounded-lg shadow-md m-4">
-      <h2 className="text-xl font-bold">{product.name}</h2>
       <form onSubmit={handleSubmit} className="p-7 flex flex-col items-center">
         <input
           className="border p-3"
@@ -58,7 +55,7 @@ const UpdateProduct: React.FC = () => {
         <input
           className="border p-3"
           type="text"
-          placeholder="Consumption (units/day)"
+          placeholder="Consumption(units/day)"
           onChange={(e) =>
             setFormData({
               ...formData,
@@ -77,4 +74,4 @@ const UpdateProduct: React.FC = () => {
   );
 };
 
-export default UpdateProduct;
+export default AddProduct;

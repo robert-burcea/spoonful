@@ -1,6 +1,6 @@
 [
     {
-      "id": 1,
+      "id": "coca-cola",
       "name": "coca-cola",
       "barcode": 12343,
       "qty": 321,
@@ -9,7 +9,7 @@
       "minimumStockDaysForAlert": 7
     },
     {
-      "id": 2,
+      "id": "fanta",
       "name": "fanta",
       "barcode": 13343,
       "qty": 331,

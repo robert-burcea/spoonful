@@ -5,6 +5,7 @@ import ProductsList from './components/ProductsList';
 import Admin from './components/Admin';
 import Navbar from './components/Navbar';
 import UpdateProduct from './components/UpdateProduct';
+import AddProduct from './components/AddProduct';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/products" element={<ProductsList />} />
+          <Route path="/add-product" element={<AddProduct />} />
           <Route path="/update-product" element={<UpdateProduct />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
