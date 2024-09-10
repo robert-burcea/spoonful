@@ -4,14 +4,13 @@ import { getAuth } from 'firebase/auth';
 
 // Firebase config object provided from Firebase Console
 const firebaseConfig = {
-    apiKey: "AIzaSyC6HrlvLmrlK6D9b2IXGoAURVRUY-dpZ50",
-    authDomain: "spoonful-app.firebaseapp.com",
-    projectId: "spoonful-app",
-    storageBucket: "spoonful-app.appspot.com",
-    messagingSenderId: "1062829906183",
-    appId: "1:1062829906183:web:947bff0eda850745e74da2",
-    measurementId: "G-413GJ96B1K"
-  
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
