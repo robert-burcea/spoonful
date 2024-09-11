@@ -2,7 +2,6 @@ import { createContext, useState, ReactNode, useEffect } from 'react';
 import { Product } from '../types/Product';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { refreshStockInfo } from '../utils/inventoryUtils';
 
 export interface InventoryContextType {
   inventory: Product[];
