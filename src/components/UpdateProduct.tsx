@@ -19,8 +19,11 @@ const UpdateProduct: React.FC = () => {
     name: product.name,
     id: product.id,
     qty: product.qty,
+    estimatedStock: product.estimatedStock,
+    realStock: product.realStock,
     unitsPerDayConsumption: product.unitsPerDayConsumption,
     minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
+    showEstimatedStock: false,
   });
 
   const productsList = useContext(InventoryContext);
@@ -39,6 +42,10 @@ const UpdateProduct: React.FC = () => {
     navigate('/products');
   };
 
+  const handleCancel = () => {
+    navigate('/products');
+  };
+
   return (
     <div className="flex flex-col p-4 border rounded-lg shadow-md m-4">
       <h2 className="text-xl font-bold">{product.name}</h2>
@@ -53,26 +60,25 @@ const UpdateProduct: React.FC = () => {
           type="number"
           placeholder="Quantity"
           onChange={(e) =>
-            setFormData({ ...formData, qty: Number(e.target.value) })
+            setFormData({
+              ...formData,
+              realStock: Number(e.target.value),
+              showEstimatedStock: false,
+            })
           }
           className="border p-3"
         />
-        <input
-          className="border p-3"
-          type="text"
-          value={formData.unitsPerDayConsumption}
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              unitsPerDayConsumption: Number(e.target.value),
-            })
-          }
-        ></input>
         <button
           type="submit"
           className="mt-3 p-3 rounded bg-blue-600 hover:bg-blue-700 border"
         >
           SAVE
+        </button>
+        <button
+          className="mt-3 p-3 rounded bg-blue-600 hover:bg-blue-700 border"
+          onClick={() => handleCancel()}
+        >
+          CANCEL
         </button>
       </form>
     </div>

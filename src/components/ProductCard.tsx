@@ -47,9 +47,16 @@ function ProductCard({ product }: ProductCardProps) {
         className={`p-4 border rounded-lg shadow-md m-4 ${product.alert ? 'bg-red-300' : 'bg-green-200'}`}
       >
         <h2 className="text-xl font-bold">{product.name}</h2>
-        <p>
-          Stoc estimat: <p className="text-xl font-bold">{product.qty}</p>{' '}
-        </p>
+        {product.estimatedStock ? (
+          <p>
+            Stoc estimat:{' '}
+            <p className="text-xl font-bold">{product.estimatedStock}</p>{' '}
+          </p>
+        ) : (
+          <p>
+            Stoc REAL: <p className="text-xl font-bold">{product.realStock}</p>{' '}
+          </p>
+        )}
         <p>Zile pana la alerta: {calculateDaysUntilAlert(product)}</p>
         <p>
           Ultimul inventar:{' '}
@@ -67,22 +74,19 @@ function ProductCard({ product }: ProductCardProps) {
           {product.alert ? 'ATENTIE! Stoc pe final!' : ''}
         </p>
         <button
-          className="bg-blue-500 text-white py-1 px-2 m-2 rounded"
+          className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
           onClick={() => handleEditClick(product)}
         >
-          Edit
+          Introdu stoc inventar
+        </button>
+        <button className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700">
+          Adauga vanzare
         </button>
         <button
-          className="bg-blue-500 text-white py-1 px-2 m-2 rounded"
+          className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
           onClick={() => handleDeleteClick()}
         >
           Delete
-        </button>
-        <button className="bg-blue-500 text-white py-1 px-2 m-2 rounded">
-          Adauga vanzare
-        </button>
-        <button className="bg-blue-500 text-white py-1 px-2 m-2 rounded">
-          Introdu stoc inventar
         </button>
       </div>
     </Tilt>

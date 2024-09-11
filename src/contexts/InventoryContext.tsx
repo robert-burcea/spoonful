@@ -38,7 +38,6 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({
               ...product,
             }));
             console.log(products);
-            refreshStockInfo(products);
             setInventory(products);
           } else {
             console.log('No products field found in the document.');
@@ -51,9 +50,6 @@ export const InventoryProvider: React.FC<InventoryProviderProps> = ({
         console.error('Error fetching document:', error);
       }
     );
-
-    //we check to see if any product stock is running low
-    refreshStockInfo(inventory);
 
     // Clean up the listener on component unmount
     return () => unsubscribe();

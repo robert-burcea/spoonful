@@ -16,9 +16,12 @@ const AddProduct: React.FC = () => {
     name: '',
     id: uuidv4(),
     qty: 0,
+    estimatedStock: 0,
+    realStock: 0,
     lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
     unitsPerDayConsumption: 0,
     minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
+    showEstimatedStock: false,
   });
 
   const productsList = useContext(InventoryContext);
@@ -36,6 +39,10 @@ const AddProduct: React.FC = () => {
     navigate('/products');
   };
 
+  const handleCancel = () => {
+    navigate('/products');
+  };
+
   return (
     <div className="flex flex-col p-4 border rounded-lg shadow-md m-4">
       <form onSubmit={handleSubmit} className="p-7 flex flex-col items-center">
@@ -49,7 +56,11 @@ const AddProduct: React.FC = () => {
           type="number"
           placeholder="Quantity"
           onChange={(e) =>
-            setFormData({ ...formData, qty: Number(e.target.value) })
+            setFormData({
+              ...formData,
+              realStock: Number(e.target.value),
+              estimatedStock: Number(e.target.value),
+            })
           }
           className="border p-3"
         />
@@ -69,6 +80,12 @@ const AddProduct: React.FC = () => {
           className="mt-3 p-3 rounded bg-blue-600 hover:bg-blue-700 border"
         >
           SAVE
+        </button>
+        <button
+          className="mt-3 p-3 rounded bg-blue-600 hover:bg-blue-700 border"
+          onClick={() => handleCancel()}
+        >
+          CANCEL
         </button>
       </form>
     </div>
