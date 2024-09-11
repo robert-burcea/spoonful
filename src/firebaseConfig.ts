@@ -4,13 +4,13 @@ import { getAuth } from 'firebase/auth';
 
 // Firebase config object provided from Firebase Console
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: 'AIzaSyC6HrlvLmrlK6D9b2IXGoAURVRUY-dpZ50',
+  authDomain: 'spoonful-app.firebaseapp.com',
+  projectId: 'spoonful-app',
+  storageBucket: 'spoonful-app.appspot.com',
+  messagingSenderId: '1062829906183',
+  appId: '1:1062829906183:web:947bff0eda850745e74da2',
+  measurementId: 'G-413GJ96B1K',
 };
 
 // Initialize Firebase
