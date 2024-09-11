@@ -60,16 +60,16 @@ function ProductCard({ product }: ProductCardProps) {
         {product.alert ? 'ATENTIE! Stoc pe final!' : ''}
       </p>
       <button
-        className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
+        className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
         onClick={() => handleEditClick(product)}
       >
         Introdu stoc inventar
       </button>
-      <button className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700">
+      <button className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700">
         Adauga vanzare
       </button>
       <button
-        className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg transform transition-all duration-300 ease-in-out hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
+        className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
         onClick={() => handleDeleteClick()}
       >
         Delete
