@@ -13,8 +13,11 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   const navigate = useNavigate();
 
-  const handleEditClick = (product: Product) => {
-    navigate('/update-product', { state: { product } });
+  const handleInventoryEditClick = (product: Product) => {
+    navigate('/update-product-inventory', { state: { product } });
+  };
+  const handleSaleEditClick = (product: Product) => {
+    navigate('/update-product-sale', { state: { product } });
   };
   const handleDeleteClick = () => {
     if (confirm(`Are you sure you want to delete ${product.name}?`))
@@ -45,7 +48,7 @@ function ProductCard({ product }: ProductCardProps) {
           Stoc REAL: <p className="text-xl font-bold">{product.realStock}</p>{' '}
         </p>
       )}
-      <p>Zile pana la alerta: {calculateDaysUntilAlert(product)}</p>
+      <p>Zile pana se termina stocul: {calculateDaysUntilAlert(product)}</p>
       <p>
         Ultimul inventar:{' '}
         {formatDate(formatFirestoreTimestamp(product.lastDateOfInventoryCheck))}
@@ -61,11 +64,14 @@ function ProductCard({ product }: ProductCardProps) {
       </p>
       <button
         className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
-        onClick={() => handleEditClick(product)}
+        onClick={() => handleInventoryEditClick(product)}
       >
         Introdu stoc inventar
       </button>
-      <button className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700">
+      <button
+        className="bg-blue-500 text-white py-2 px-3 m-2 rounded shadow-lg hover:bg-blue-600 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 active:scale-95 active:bg-blue-700"
+        onClick={() => handleSaleEditClick(product)}
+      >
         Adauga vanzare
       </button>
       <button

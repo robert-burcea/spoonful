@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ProductsList from './components/ProductsList';
 import Admin from './components/Admin';
 import Navbar from './components/Navbar';
-import UpdateProduct from './components/UpdateProduct';
 import AddProduct from './components/AddProduct';
+import UpdateProductSale from './components/UpdateProductSale';
+import UpdateProductInventory from './components/UpdateProduct';
 
 function App() {
   return (
@@ -13,10 +14,14 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<ProductsList />} />
+          <Route path="/products" element={<ProductsList />} />
           <Route path="/products" element={<ProductsList />} />
           <Route path="/add-product" element={<AddProduct />} />
-          <Route path="/update-product" element={<UpdateProduct />} />
+          <Route
+            path="/update-product-inventory"
+            element={<UpdateProductInventory />}
+          />
+          <Route path="/update-product-sale" element={<UpdateProductSale />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </Router>

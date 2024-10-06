@@ -7,7 +7,9 @@ function ProductsList() {
   const inventoryContext = useContext(InventoryContext);
 
   useEffect(() => {
-    if (inventoryContext) refreshStockInfo(inventoryContext.inventory);
+    if (inventoryContext !== undefined) {
+      refreshStockInfo(inventoryContext.inventory);
+    }
   }, []);
 
   return (

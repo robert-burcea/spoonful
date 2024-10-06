@@ -1,4 +1,7 @@
-import { updateProduct } from '../firebase/firebase-functions';
+import {
+  updateAllProducts,
+  updateProduct,
+} from '../firebase/firebase-functions';
 import { Product } from '../types/Product';
 
 function isSameDay(d1: Date, d2: Date) {
@@ -12,11 +15,6 @@ function isSameDay(d1: Date, d2: Date) {
 export const isDayOfInventoryCheck = (product: Product) => {
   const currentDate = new Date();
   const lastCheckDate = new Date(product.lastDateOfInventoryCheck.toDate());
-  console.log(
-    currentDate,
-    lastCheckDate,
-    isSameDay(currentDate, lastCheckDate)
-  );
   if (isSameDay(currentDate, lastCheckDate)) return true;
 };
 
@@ -35,29 +33,40 @@ export const calculateDaysUntilAlert = (product: Product) => {
     stock = product.realStock;
   } else stock = getEstimatedStock(product);
 
-  if (stock <= product.minimumStockDaysForAlert) {
-    return 0; // Alert now
-  } else {
-    return Math.ceil(
-      (stock - product.minimumStockDaysForAlert) /
-        product.unitsPerDayConsumption
-    );
-  }
+  return Math.ceil(stock / product.unitsPerDayConsumption);
 };
+
+function countBusinessDays(startDate: Date, endDate: Date): number {
+  let currentDate = new Date(startDate);
+  let businessDaysCount = 0;
+
+  // Iterate through each date between startDate and endDate
+  while (currentDate <= endDate) {
+    const dayOfWeek = currentDate.getDay();
+    // Check if the day is Monday to Friday (1 is Monday, 5 is Friday)
+    if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+      businessDaysCount++;
+    }
+    // Move to the next day
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return businessDaysCount;
+}
 
 export const checkIfThereIsAlertNow = (stock: number, product: Product) => {
   //daca stocul estimat a scazut sub zilele de alerta
   if (
     stock <=
-      product.minimumStockDaysForAlert * product.unitsPerDayConsumption &&
-    product.alert === false
-  )
+    product.minimumStockDaysForAlert * product.unitsPerDayConsumption
+  ) {
     return true;
-  else if (
+  } else if (
     stock >
     product.minimumStockDaysForAlert * product.unitsPerDayConsumption
-  )
+  ) {
     return false;
+  }
 };
 
 export const getUpdatedProduct = (product: Product) => {
@@ -81,14 +90,16 @@ export const getUpdatedProduct = (product: Product) => {
     };
 };
 
+export const getAllUpdatedProducts = (products: Product[]) => {
+  let newProducts = products.map((product: Product) => {
+    return getUpdatedProduct(product);
+  });
+  console.log('New Updated Products:', newProducts);
+  return newProducts;
+};
+
 export const refreshStockInfo = async (products: Product[]) => {
   // Create a new array of products with updated alert statuses
-  const updatedProducts = await Promise.all(
-    products.map(async (product) => {
-      await updateProduct(getUpdatedProduct(product));
-    })
-  );
-
-  // Optionally, handle the updatedProducts array or return it
-  console.log('Updated Products:', updatedProducts);
+  let newProducts = getAllUpdatedProducts(products);
+  await updateAllProducts(newProducts);
 };

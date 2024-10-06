@@ -1,27 +1,37 @@
 import { useState, useContext } from 'react';
 import InventoryContext from '../contexts/InventoryContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MIN_DAYS_FOR_STOCK_ALERT } from '../utils/stockVariables';
 import { Product } from '../types/Product';
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
-import { addProductToFirebase } from '../firebase/firebase-functions';
+import {
+  updateAllProducts,
+  updateProduct,
+} from '../firebase/firebase-functions';
 import { Timestamp } from 'firebase/firestore';
 
-const AddProduct: React.FC = () => {
+export type UpdateProductSaleInterface = Omit<
+  Product,
+  'lastDateOfInventoryCheck'
+>;
+
+const UpdateProductSale: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
+  const { product } = location.state as { product: Product };
+
   const [formData, setFormData] = useState<Product>({
-    barcode: 0,
-    alert: false,
-    name: '',
-    id: uuidv4(),
-    qty: 0,
-    estimatedStock: 0,
-    realStock: 0,
-    lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
-    unitsPerDayConsumption: 0,
+    barcode: product.barcode,
+    alert: product.alert,
+    name: product.name,
+    id: product.id,
+    qty: product.qty,
+    estimatedStock: product.estimatedStock,
+    realStock: product.realStock,
+    unitsPerDayConsumption: product.unitsPerDayConsumption,
     minimumStockDaysForAlert: MIN_DAYS_FOR_STOCK_ALERT,
     showEstimatedStock: false,
+    lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
   });
 
   const productsList = useContext(InventoryContext);
@@ -35,8 +45,21 @@ const AddProduct: React.FC = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    addProductToFirebase(formData);
-    //navigate('/products');
+    const updatedProducts = productsList.inventory.map(
+      (dbProduct: Product) =>
+        dbProduct.id === formData.id
+          ? {
+              ...dbProduct,
+              estimatedStock: product.estimatedStock,
+              realStock: product.realStock,
+              alert: product.alert,
+              showEstimatedStock: product.showEstimatedStock,
+              lastDateOfInventoryCheck: Timestamp.fromDate(new Date()), // Set new inventory check date
+            } // Merge updated data with the existing product
+          : dbProduct // Ensure other products remain unchanged
+    );
+    updateAllProducts(updatedProducts);
+    navigate('/products');
   };
 
   const handleCancel = () => {
@@ -45,11 +68,13 @@ const AddProduct: React.FC = () => {
 
   return (
     <div className="flex flex-col p-4 border rounded-lg shadow-md m-4">
+      <h1>Introdu bucati vandute</h1>
+      <h2 className="text-xl font-bold">{product.name}</h2>
       <form onSubmit={handleSubmit} className="p-7 flex flex-col items-center">
         <input
+          value={formData.name}
           className="border p-3"
           type="text"
-          placeholder="Product name"
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         ></input>
         <input
@@ -58,23 +83,12 @@ const AddProduct: React.FC = () => {
           onChange={(e) =>
             setFormData({
               ...formData,
-              realStock: Number(e.target.value),
-              estimatedStock: Number(e.target.value),
+              estimatedStock: formData.estimatedStock - Number(e.target.value),
+              showEstimatedStock: false,
             })
           }
           className="border p-3"
         />
-        <input
-          className="border p-3"
-          type="text"
-          placeholder="Consumption(units/day)"
-          onChange={(e) =>
-            setFormData({
-              ...formData,
-              unitsPerDayConsumption: Number(e.target.value),
-            })
-          }
-        ></input>
         <button
           type="submit"
           className="mt-3 p-3 rounded bg-blue-600 hover:bg-blue-700 border"
@@ -92,4 +106,4 @@ const AddProduct: React.FC = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProductSale;

@@ -7,7 +7,7 @@ import { updateProduct } from '../firebase/firebase-functions';
 
 export type UpdateProductInterface = Omit<Product, 'lastDateOfInventoryCheck'>;
 
-const UpdateProduct: React.FC = () => {
+const UpdateProductInventory: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -37,7 +37,6 @@ const UpdateProduct: React.FC = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(product);
     updateProduct(formData);
     navigate('/products');
   };
@@ -48,6 +47,7 @@ const UpdateProduct: React.FC = () => {
 
   return (
     <div className="flex flex-col p-4 border rounded-lg shadow-md m-4">
+      <h3>Introdu stoc depozit</h3>
       <h2 className="text-xl font-bold">{product.name}</h2>
       <form onSubmit={handleSubmit} className="p-7 flex flex-col items-center">
         <input
@@ -63,6 +63,7 @@ const UpdateProduct: React.FC = () => {
             setFormData({
               ...formData,
               realStock: Number(e.target.value),
+              estimatedStock: Number(e.target.value),
               showEstimatedStock: false,
             })
           }
@@ -85,4 +86,4 @@ const UpdateProduct: React.FC = () => {
   );
 };
 
-export default UpdateProduct;
+export default UpdateProductInventory;

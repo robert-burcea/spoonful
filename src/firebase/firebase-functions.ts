@@ -38,33 +38,79 @@ export const addProductToFirebase = async (product: Product) => {
 export const updateProduct = async (product: UpdateProductInterface) => {
   const docRef = doc(db, 'inventory', 'beverages');
 
+  console.log(
+    '1. Produs procesat si trimis in updateProduct catre update:',
+    product
+  );
+
   try {
     // Get the current data from Firestore
     const docSnap = await getDoc(docRef);
+
     if (docSnap.exists()) {
       const beveragesData = docSnap.data();
 
+      // Check if products field exists and is an array
+      if (!beveragesData?.products || !Array.isArray(beveragesData.products)) {
+        console.error('No products array found in the document.');
+        return;
+      }
       // Update the specific product in the array
       const updatedProducts = beveragesData.products.map(
         (dbProduct: Product) =>
           dbProduct.id === product.id
             ? {
                 ...dbProduct,
-                ...product,
-                lastDateOfInventoryCheck: Timestamp.fromDate(new Date()),
+                estimatedStock: product.estimatedStock,
+                realStock: product.realStock,
+                alert: product.alert,
+                showEstimatedStock: product.showEstimatedStock,
+                lastDateOfInventoryCheck: Timestamp.fromDate(new Date()), // Set new inventory check date
               } // Merge updated data with the existing product
             : dbProduct // Ensure other products remain unchanged
       );
 
+      console.log('2. Produse updatate cu noul produs:', product);
+
       // Update the Firestore document with the modified product array
-      await updateDoc(docRef, { products: updatedProducts });
-      console.log('Product updated successfully!');
+      updateDoc(docRef, { products: updatedProducts });
+      console.log(
+        `Product with ID: ${product.id} updated successfully to this:`
+      );
     } else {
       console.log('No such document!');
     }
   } catch (error) {
-    console.error('Error updating product: ', error);
+    console.error(`Error updating product ${product.id}: `, error);
   }
+  console.log('Produse');
+};
+
+export const updateAllProducts = async (updatedProducts: Product[]) => {
+  const docRef = doc(db, 'inventory', 'beverages');
+
+  try {
+    // Get the current data from Firestore
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const beveragesData = docSnap.data();
+
+      // Check if products field exists and is an array
+      if (!beveragesData?.products || !Array.isArray(beveragesData.products)) {
+        console.error('No products array found in the document.');
+        return;
+      }
+
+      // Update the Firestore document with the modified product array
+      updateDoc(docRef, { products: updatedProducts });
+    } else {
+      console.log('No such document!');
+    }
+  } catch (error) {
+    console.error(`Error updating products: `, error);
+  }
+  console.log('Produse');
 };
 
 export const deleteProduct = async (productId: string) => {
