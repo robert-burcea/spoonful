@@ -1,7 +1,4 @@
-import {
-  updateAllProducts,
-  updateProduct,
-} from '../firebase/firebase-functions';
+import { updateAllProducts } from '../firebase/firebase-functions';
 import { Product } from '../types/Product';
 
 function isSameDay(d1: Date, d2: Date) {
@@ -36,7 +33,7 @@ export const calculateDaysUntilAlert = (product: Product) => {
   return Math.ceil(stock / product.unitsPerDayConsumption);
 };
 
-function countBusinessDays(startDate: Date, endDate: Date): number {
+/*function countBusinessDays(startDate: Date, endDate: Date): number {
   let currentDate = new Date(startDate);
   let businessDaysCount = 0;
 
@@ -52,7 +49,7 @@ function countBusinessDays(startDate: Date, endDate: Date): number {
   }
 
   return businessDaysCount;
-}
+}*/
 
 export const checkIfThereIsAlertNow = (stock: number, product: Product) => {
   //daca stocul estimat a scazut sub zilele de alerta
