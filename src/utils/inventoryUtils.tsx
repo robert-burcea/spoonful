@@ -22,9 +22,11 @@ export const getEstimatedStock = (product: Product) => {
     (currentDate.getTime() - lastCheckDate.getTime()) / (1000 * 60 * 60 * 24)
   );*/
   const businessDaysPassed = countBusinessDays(lastCheckDate, currentDate);
-  return (
-    product.realStock - businessDaysPassed * product.unitsPerDayConsumption
-  );
+  const estimatedStock =
+    product.realStock - businessDaysPassed * product.unitsPerDayConsumption > 0
+      ? product.realStock - businessDaysPassed * product.unitsPerDayConsumption
+      : 0;
+  return estimatedStock;
 };
 
 export const calculateDaysUntilAlert = (product: Product) => {
