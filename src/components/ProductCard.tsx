@@ -48,7 +48,9 @@ function ProductCard({ product }: ProductCardProps) {
           Stoc REAL: <p className="text-xl font-bold">{product.realStock}</p>{' '}
         </p>
       )}
-      <p>Zile pana se termina stocul: {calculateDaysUntilAlert(product)}</p>
+      <p>
+        Zile de lucru pana se termina stocul: {calculateDaysUntilAlert(product)}
+      </p>
       <p>
         Ultimul inventar:{' '}
         {formatDate(formatFirestoreTimestamp(product.lastDateOfInventoryCheck))}

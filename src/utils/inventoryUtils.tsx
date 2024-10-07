@@ -18,10 +18,13 @@ export const isDayOfInventoryCheck = (product: Product) => {
 export const getEstimatedStock = (product: Product) => {
   const currentDate = new Date();
   const lastCheckDate = new Date(product.lastDateOfInventoryCheck.toDate());
-  const daysPassed = Math.floor(
+  /*const daysPassed = Math.floor(
     (currentDate.getTime() - lastCheckDate.getTime()) / (1000 * 60 * 60 * 24)
+  );*/
+  const businessDaysPassed = countBusinessDays(lastCheckDate, currentDate);
+  return (
+    product.realStock - businessDaysPassed * product.unitsPerDayConsumption
   );
-  return product.realStock - daysPassed * product.unitsPerDayConsumption;
 };
 
 export const calculateDaysUntilAlert = (product: Product) => {
@@ -33,7 +36,7 @@ export const calculateDaysUntilAlert = (product: Product) => {
   return Math.ceil(stock / product.unitsPerDayConsumption);
 };
 
-/*function countBusinessDays(startDate: Date, endDate: Date): number {
+function countBusinessDays(startDate: Date, endDate: Date): number {
   let currentDate = new Date(startDate);
   let businessDaysCount = 0;
 
@@ -49,7 +52,7 @@ export const calculateDaysUntilAlert = (product: Product) => {
   }
 
   return businessDaysCount;
-}*/
+}
 
 export const checkIfThereIsAlertNow = (stock: number, product: Product) => {
   //daca stocul estimat a scazut sub zilele de alerta
@@ -82,6 +85,7 @@ export const getUpdatedProduct = (product: Product) => {
   } else
     return {
       ...product,
+      alert: false,
       estimatedStock: stock,
       showEstimatedStock: isDayOfInventoryCheck(product) ? false : true,
     };
@@ -91,12 +95,17 @@ export const getAllUpdatedProducts = (products: Product[]) => {
   let newProducts = products.map((product: Product) => {
     return getUpdatedProduct(product);
   });
-  console.log('New Updated Products:', newProducts);
   return newProducts;
 };
 
 export const refreshStockInfo = async (products: Product[]) => {
   // Create a new array of products with updated alert statuses
   let newProducts = getAllUpdatedProducts(products);
-  await updateAllProducts(newProducts);
+  console.log('Just before update in db:', newProducts);
+  if (
+    newProducts !== undefined &&
+    Array.isArray(newProducts) &&
+    newProducts.length > 0
+  )
+    await updateAllProducts(newProducts);
 };
